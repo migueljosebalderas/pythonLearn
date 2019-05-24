@@ -8,7 +8,6 @@
             Agregar $ORIGEN
             Guardar los datos del registro una hoja (en un archivo result.xlsx)
 4. Grabar archivo
-
 """
 
 
@@ -22,11 +21,15 @@ nueva = True
 
 data_dir = ".\\data\\"
 
+IBM = "IBM"
+TERA = "TERA"
+ORIGEN = "ORIGEN"
+
 def get_origen(nombre):
-    if "IBM" in nombre:
-        return "IBM"
-    elif "TERA" in nombre:
-        return "TERA"
+    if IBM in nombre:
+        return IBM
+    elif TERA in nombre:
+        return TERA
 
 def exists_sheet(sheet):
     try:
@@ -36,17 +39,17 @@ def exists_sheet(sheet):
         return False
 
 def format_row(row,origen,rownum):
-    if origen == "TERA":
-        current_row = list(row)
-        last_item = current_row[len(current_row) - 1]
-        row_formated=current_row[0:len(current_row)-1]+["",last_item]
-        if rownum == 1:
-            row_formated += ["ORIGEN"]
-        else:
-            row_formated += [origen]
-
-        return tuple(row_formated)
+    current_row = list(row)
+    if rownum == 1:
+        current_row[len(current_row)-1] = IBM
+        current_row = [ORIGEN] + current_row + [TERA]
     else:
+        current_row = [origen] + current_row
+
+    if origen == TERA:
+        last_item = current_row[len(current_row) - 1]
+        current_row=current_row[0:len(current_row)-1]+["",last_item]
+    return tuple(current_row)
 
 
 for file in listdir(data_dir):
@@ -71,13 +74,9 @@ for file in listdir(data_dir):
         #Copiar el contenido
         contador = 1
         for row in ws_current.values:
-            if nueva:
+            if nueva or contador > 1 :
                 row_add = format_row(row,origen,contador)
                 ws_result.append(row_add)
-            else:
-                if contador > 1 :
-                    row_add = format_row(row,origen,contador)
-                    ws_result.append(row_add)
             
             #print(row_add)
             contador +=1
