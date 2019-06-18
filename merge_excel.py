@@ -8,11 +8,9 @@
             Agregar $ORIGEN
             Guardar los datos del registro una hoja (en un archivo result.xlsx)
 4. Grabar archivo
-
 """
 
 
-import os
 import sys
 from openpyxl import Workbook
 from openpyxl import load_workbook
@@ -23,11 +21,15 @@ nueva = True
 
 data_dir = ".\\data\\"
 
+IBM = "IBM"
+TERA = "TERA"
+ORIGEN = "ORIGEN"
+
 def get_origen(nombre):
-    if "IBM" in nombre:
-        return "IBM"
-    elif "TERA" in nombre:
-        return "TERA"
+    if IBM in nombre:
+        return IBM
+    elif TERA in nombre:
+        return TERA
 
 def exists_sheet(sheet):
     try:
@@ -35,6 +37,20 @@ def exists_sheet(sheet):
         return True
     except:
         return False
+
+def format_row(row,origen,rownum):
+    current_row = list(row)
+    if rownum == 1:
+        current_row[len(current_row)-1] = IBM
+        current_row = [ORIGEN] + current_row + [TERA]
+    else:
+        current_row = [origen] + current_row
+
+    if origen == TERA:
+        last_item = current_row[len(current_row) - 1]
+        current_row=current_row[0:len(current_row)-1]+["",last_item]
+    return tuple(current_row)
+
 
 for file in listdir(data_dir):
     wb_current = load_workbook(data_dir + file)
@@ -58,17 +74,9 @@ for file in listdir(data_dir):
         #Copiar el contenido
         contador = 1
         for row in ws_current.values:
-            if nueva:
-                if contador == 1:
-                    row_add = ("ORIGEN",) + row
-                    ws_result.append(row_add)
-                else:
-                    row_add = (origen,) + row
-                    ws_result.append(row_add)
-            else:
-                if contador > 1 :
-                    row_add = (origen,) + row
-                    ws_result.append(row_add)
+            if nueva or contador > 1 :
+                row_add = format_row(row,origen,contador)
+                ws_result.append(row_add)
             
             #print(row_add)
             contador +=1
