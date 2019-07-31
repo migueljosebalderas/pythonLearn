@@ -15,14 +15,14 @@ class ExcelTest(TestCase):
         xl = Excel()
         data = xl.read_file("samplexl.xlsx","datosm")
 
-        data_expected = [("Nombre","App","Apm"), ("Miguel","Bal","Gar"), ("Eira","Garcia","Mata")]
+        data_expected = [("Nombre","App","Apm"), ("X","T","G"), ("E","A","E")]
 
         self.assertEqual(data,data_expected)
 
     def test_write_file(self):
         """Archivo de excel generado de manera correcta"""
         xl = Excel()
-        data = [ ["No Cliente","Nombre"],["1948393849383","MBalderas"],["853939383938293","Santiago Bald"] ]
+        data = [ ["No Cliente","Nombre"],["1948393849383","asdfasdf"],["853939383938293","asasdfasdfasdf"] ]
         xl.write_file("prueba1","result-val",data)
 
         self.assertTrue(True)
