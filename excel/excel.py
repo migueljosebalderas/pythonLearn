@@ -10,8 +10,9 @@ class Excel:
         try:
             wb = load_workbook(filename=file_name)
             ws = wb[sheet_name]
-            data = [row for row in ws.values]
-            return data
+            self.data = [row for row in ws.values]
+
+            return self.data
         except KeyError as key_error:
             print("La hoja {0} no existe".format(sheet_name))
         except FileNotFoundError as fnf_error:
@@ -34,3 +35,10 @@ class Excel:
         except:
             print("Ha ocurrido un error al escribir el archivo:",sys.exc_info()[0])
 
+    def get_headers(self):
+        if self.data:
+            return self.data[0]
+
+    def get_data(self):
+        if self.data:
+            return self.data[1:]

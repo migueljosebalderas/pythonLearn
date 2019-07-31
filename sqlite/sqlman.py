@@ -4,7 +4,7 @@ class DataBase:
 
     def __init__(self, database):
         self.conn = sqlite3.connect(database)
-        self.curs = conn.cursor()
+        self.curs = self.conn.cursor()
 
     def executeSQL(self,sql):
         """Ejecuta una sentencia ddl"""
@@ -19,7 +19,7 @@ class DataBase:
     def loadData(self,table, data)
         """Carga los datos en la tabla indicada"""
         cols_total = len(data[0])
-        self.curs.executemany(get_sqlInsert(table,cols_total),data)
+        self.curs.executemany(self.get_sqlInsert(table,cols_total),data)
         self.conn.commit()
 
     def get_sqlInsert(table, cols_total):
